@@ -16,11 +16,11 @@ npm install
 npm start -- --host 0.0.0.0
 ```
 
-User credentials (local test data)
-- Tenant 1 Admin: `admin1` / `passAdmin1`
-- Tenant 1 User:  `user1`  / `passUser1`
-- Tenant 2 Admin: `admin2` / `passAdmin2`
-- Tenant 2 User:  `user2`  / `passUser2`
+User credentials (local test data)(username/password)
+- Tenant 1 Admin: `admin1` / `pass123`
+- Tenant 1 User:  `user1`  / `pass123`
+- Tenant 2 Admin: `admin2` / `pass123`
+- Tenant 2 User:  `user2`  / `pass123`
 
 Notes about login/tenant enforcement
 - The app loads the tenant configuration based on hostname (first subdomain) or `?tenant=` query parameter.
