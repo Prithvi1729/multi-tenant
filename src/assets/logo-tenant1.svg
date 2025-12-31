@@ -1,0 +1,17 @@
+<svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+  <g fill="#000000">
+    <path d="M120 40 L60 90 V150 H110 V110 H150 V150 H180 V90 Z"/>
+    <rect x="95" y="110" width="10" height="10"/>
+    <rect x="110" y="110" width="10" height="10"/>
+    <rect x="95" y="125" width="10" height="10"/>
+    <rect x="110" y="125" width="10" height="10"/>
+    <rect x="165" y="40" width="20" height="110"/>
+  </g>
+  <text x="150" y="185" text-anchor="middle"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="22"
+        letter-spacing="3"
+        fill="#000000">
+    TENANT ONE
+  </text>
+</svg>

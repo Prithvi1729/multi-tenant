@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Dashboard</h2>
+    <div>Welcome, {{user?.username}} <span class="badge bg-secondary ms-2">{{user?.role}}</span></div>
+  </div>
+
+  <div class="row gy-3">
+    <div class="col-md-6">
+      <div class="card p-3 dashboard-panel">Card A (visible to Admin and User)</div>
+    </div>
+    <div class="col-md-6" *ngIf="user?.role==='Admin'">
+      <div class="card p-3 dashboard-panel">Card B (Admin only)</div>
+    </div>
+  </div>
+</div>

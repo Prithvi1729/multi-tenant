@@ -1,0 +1,16 @@
+{
+  "tenant1": {
+    "id": "tenant1",
+    "name": "Tenant One",
+    "logo": "assets/logo-tenant1.svg",
+    "layout": "side",
+    "theme": "primary"
+  },
+  "tenant2": {
+    "id": "tenant2",
+    "name": "Tenant Two",
+    "logo": "assets/logo-tenant2.svg",
+    "layout": "top",
+    "theme": "secondary"
+  }
+}

@@ -1,0 +1,19 @@
+<div class="tenant-switcher d-inline-block">
+  <ng-container *ngIf="!compact">
+    <select class="form-select form-select-sm" [value]="selected" (change)="change($event)">
+      <option value="" disabled>Select tenant</option>
+      <option *ngFor="let t of tenants" [value]="t.id">{{t.name}}</option>
+    </select>
+  </ng-container>
+
+  <ng-container *ngIf="compact">
+    <div class="dropdown">
+      <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" (click)="open = !open" [attr.aria-expanded]="open">
+        {{ selectedName }}
+      </button>
+      <ul class="dropdown-menu" [class.show]="open">
+        <li *ngFor="let t of tenants"><a class="dropdown-item" (click)="selectTenant(t.id)">{{t.name}}</a></li>
+      </ul>
+    </div>
+  </ng-container>
+</div>
