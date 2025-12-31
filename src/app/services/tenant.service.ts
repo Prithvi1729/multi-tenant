@@ -60,7 +60,7 @@ export class TenantService {
       for (const id of Object.keys(this.configs)) {
         if (!id) continue;
         // exact match, startsWith, or contained (covers many dev host patterns)
-        if (h === id || h.startsWith(id + '.') || h.includes('.' + id + '.') || h.endsWith('.' + id) || h.indexOf(id) === 0) {
+        if (h.startsWith(id + '-') || h === id || h.startsWith(id + '.') || h.includes('.' + id + '.') || h.endsWith('.' + id) || h.indexOf(id) === 0) {
           return id;
         }
         // also support hosts like tenant2.local where parts.length===2

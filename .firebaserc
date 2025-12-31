@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "multi-tenant-51255949-5e816"
+  },
+  "targets": {
+    "multi-tenant-51255949-5e816": {
+      "hosting": {
+        "tenant1": [
+          "tenant1-e262b"
+        ],
+        "tenant2": [
+          "tenant2-5c89b"
+        ]
+      }
+    }
+  }
+}

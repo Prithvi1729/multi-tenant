@@ -1,0 +1,16 @@
+{
+  "hosting": [
+    {
+      "target": "tenant1",
+      "public": "dist/multi-tenant",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+    },
+    {
+      "target": "tenant2",
+      "public": "dist/multi-tenant",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+    }
+  ]
+}
