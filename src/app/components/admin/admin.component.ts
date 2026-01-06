@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TenantService } from '../../services/tenant.service';
 
 @Component({
   selector: 'app-admin',
@@ -7,9 +8,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private tenantSvc: TenantService) {}
 
-  goBack() { this.router.navigate(['/dashboard']); }
+  goBack() {
+    const tenantId = this.tenantSvc.getTenant()?.id ?? 'tenant1';
+    this.router.navigate(['/', tenantId, 'dashboard']);
+  }
 }
 
 

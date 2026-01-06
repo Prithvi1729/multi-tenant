@@ -24,7 +24,9 @@ export class AppComponent implements OnInit {
 
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((e:any) => {
       const url = e.urlAfterRedirects || e.url || '';
-      const onLogin = url === '/login' || url.startsWith('/login?');
+      const path = url.split('?')[0] || '/';
+      const segments = path.split('/').filter(Boolean);
+      const onLogin = segments.length >= 2 && segments[segments.length - 1] === 'login';
       if (onLogin) {
         document.documentElement.style.setProperty('--bg-color', '#ffffff');
         document.documentElement.style.setProperty('--text-color', '#000000');

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { TenantService } from './tenant.service';
+import { TenantService, TenantConfig } from './tenant.service';
 
 export interface User { username: string; role: 'Admin' | 'User'; tenantId: string }
 
@@ -29,13 +29,26 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem(this.storageKey);
-    this.router.navigate(['/login']);
+    this.clearSession();
+    const tenantId = this.getActiveTenantId() ?? 'tenant1';
+    this.router.navigate(['/', tenantId, 'login']);
   }
 
   getUser(): User | null {
     const raw = localStorage.getItem(this.storageKey);
     return raw ? JSON.parse(raw) : null;
+  }
+
+  getActiveTenant(): TenantConfig | null {
+    return this.tenantSvc.getTenant();
+  }
+
+  getActiveTenantId(): string | null {
+    return this.getActiveTenant()?.id ?? null;
+  }
+
+  clearSession() {
+    localStorage.removeItem(this.storageKey);
   }
 
   isLoggedIn(): boolean {

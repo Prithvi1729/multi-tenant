@@ -22,6 +22,6 @@ export class LoginComponent {
       this.error = 'Invalid credentials or wrong tenant (you must log in on your tenant URL)';
       return;
     }
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/', user.tenantId, 'dashboard']);
   }
 }

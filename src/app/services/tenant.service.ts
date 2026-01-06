@@ -18,36 +18,59 @@ export class TenantService {
   tenant$ = this.tenantSubject.asObservable();
 
   private configs: Record<string, TenantConfig> | null = null;
+  private configsPromise: Promise<Record<string, TenantConfig>> | null = null;
 
   constructor(private http: HttpClient) {
-    this.loadConfigs();
+    this.ensureConfigsLoaded();
   }
 
-  private async loadConfigs() {
-    try {
-      const data = await firstValueFrom(this.http.get<Record<string, TenantConfig>>('assets/tenants.json'));
-      this.configs = data;
-      let id = this.detectTenantId();
-      try {
-        const raw = localStorage.getItem('mt_current_user');
-        if (raw) {
-          const u = JSON.parse(raw as string) as { tenantId?: string };
-          if (u && u.tenantId && this.configs && this.configs[u.tenantId]) {
-            id = u.tenantId;
+  private loadConfigs(): Promise<Record<string, TenantConfig>> {
+    if (!this.configsPromise) {
+      this.configsPromise = firstValueFrom(
+        this.http.get<Record<string, TenantConfig>>('assets/tenants.json')
+      )
+        .then(data => {
+          this.configs = data;
+          let id = this.detectTenantId();
+          try {
+            const raw = localStorage.getItem('mt_current_user');
+            if (raw) {
+              const u = JSON.parse(raw as string) as { tenantId?: string };
+              if (u && u.tenantId && this.configs && this.configs[u.tenantId]) {
+                id = u.tenantId;
+              }
+            }
+          } catch (e) {
+            // ignore parse errors
           }
-        }
-      } catch (e) {
-        // ignore parse errors
-      }
-      const cfg = this.configs[id] ?? Object.values(this.configs)[0];
-      this.setTenant(cfg);
-    } catch (e) {
-      console.error('Failed to load tenant configs', e);
+          const cfg = this.configs[id] ?? Object.values(this.configs)[0];
+          if (cfg) this.setTenant(cfg);
+          return data;
+        })
+        .catch(e => {
+          console.error('Failed to load tenant configs', e);
+          this.configs = null;
+          throw e;
+        });
+    }
+    return this.configsPromise;
+  }
+
+  async ensureConfigsLoaded(): Promise<Record<string, TenantConfig> | null> {
+    try {
+      return await this.loadConfigs();
+    } catch {
+      return null;
     }
   }
 
   private detectTenantId(): string {
     const host = window.location.hostname || 'localhost';
+    const path = window.location.pathname || '/';
+    const segments = path.split('/').filter(Boolean);
+    if (segments.length && this.configs && this.configs[segments[0]]) {
+      return segments[0];
+    }
     // Prefer explicit query param
     const params = new URLSearchParams(window.location.search);
     const t = params.get('tenant');
@@ -90,6 +113,15 @@ export class TenantService {
 
   getAllTenants(): TenantConfig[] {
     return this.configs ? Object.values(this.configs) : [];
+  }
+
+  async setTenantById(id: string): Promise<boolean> {
+    const configs = await this.ensureConfigsLoaded();
+    if (!configs) return false;
+    const cfg = configs[id];
+    if (!cfg) return false;
+    this.setTenant(cfg);
+    return true;
   }
 
   private applyTheme(cfg: TenantConfig) {

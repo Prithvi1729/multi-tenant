@@ -26,8 +26,8 @@ export class TenantSwitcherComponent implements OnInit {
     const cfg = this.tenants.find(x => x.id === id);
     if (cfg) {
       this.tenantSvc.setTenant(cfg);
-      // update URL query param for convenience
-      this.router.navigate([], { queryParams: { tenant: id }, queryParamsHandling: 'merge' });
+      this.navigateToTenant(id);
+      this.selected = id;
     }
   }
 
@@ -35,7 +35,7 @@ export class TenantSwitcherComponent implements OnInit {
     const cfg = this.tenants.find(x => x.id === id);
     if (cfg) {
       this.tenantSvc.setTenant(cfg);
-      this.router.navigate([], { queryParams: { tenant: id }, queryParamsHandling: 'merge' });
+      this.navigateToTenant(id);
       this.selected = id;
       this.open = false;
     }
@@ -44,5 +44,16 @@ export class TenantSwitcherComponent implements OnInit {
   get selectedName(): string {
     const t = this.tenants.find(x => x.id === this.selected);
     return t ? t.name : 'Tenant';
+  }
+
+  private navigateToTenant(id: string) {
+    const [path] = this.router.url.split('?');
+    const segments = path.split('/').filter(Boolean);
+    if (!segments.length) {
+      this.router.navigate(['/', id, 'dashboard']);
+      return;
+    }
+    segments[0] = id;
+    this.router.navigate(['/', ...segments], { queryParamsHandling: 'merge' });
   }
 }
